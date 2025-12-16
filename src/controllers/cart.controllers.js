@@ -25,7 +25,7 @@ const addToCart = async (request, response) => {
     const newItem = await cartService.create({ productId, name, price, quantity });
     response.status(201).json(newItem);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    response.status(500).json({ error: err.message });
   }
 };
 
@@ -43,10 +43,21 @@ const updateQuantity = async (request, response) => {
 // Eliminar producto
 const removeFromCart = async (request, response) => {
   try {
-    await cartService.remove(request.params.id);
-    response.json({ success: true });
-  } catch (err) {
-    response.status(500).json({ error: err.message });
+    const deleted = await cartService.remove(request.params.id);
+
+    if (!deleted) {
+      return response.status(404).json({
+        message: "El Item que desea eliminar no se encuentra en el carrito",
+      });
+    }
+
+    response.status(200).json({
+      message: "Item eliminado correctamente",
+    });
+  } catch (error) {
+    response.status(500).json({
+      message: error.message,
+    });
   }
 };
 

@@ -4,6 +4,7 @@ const cors = require ("cors")
 const productsRoutes = require("../routes/products.routes");
 const cartRoutes = require("../routes/cart.routes");
 const logger = require("../middlewares/logger");
+const externalapiRoutes = require("../routes/externalapi.routes");
 
 const app = express();
 const PORT = 3000;
@@ -21,7 +22,9 @@ mongoose.connect("mongodb+srv://backend_proyecto_final:proyectofinal@cluster0.m4
 .then(() => console.log("Conectado a MongoDB"))
 .catch((err) => console.error("Error al conectar MongoDB:", err));
 
-app.use("/products", productsRoutes);
-app.use("/cart", cartRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api", externalapiRoutes);
+
 
 module.exports = app;
